@@ -1,7 +1,8 @@
 from skimage.segmentation import mark_boundaries
 from datetime import datetime
 import matplotlib
-matplotlib.use('Agg')
+matplotlib.use('Agg') # normal runtime
+# matplotlib.use('TkAgg') # debug show plots
 from matplotlib.backends.backend_pdf import PdfPages
 from lightning.pytorch.callbacks import Callback
 import matplotlib.patches as mpatches
@@ -283,53 +284,44 @@ class BaseEpochGraphs(Callback):
         if self._fixed_images is None and self.type == 'Val':
 
             val_loader = getattr(trainer, attr_name)
-            loader_iter = iter(val_loader)
 
             selected_imgs = []
             selected_labels = []
             selected_flattened_gt = []
             selected_feat_label = []
 
-            while len(selected_imgs) < self.num_imgs:
-                # Randomly skip 0–5 batches (you can tune this range)
-                skip = random.randint(5,10) # making sure we skip enough images
-                for _ in range(skip):
-                    try:
-                        next(loader_iter)
-                    except StopIteration:
-                        loader_iter = iter(val_loader)  # restart if exhausted
+            # (batch_idx -> img_idx within that batch)
+            target_selections = {2: 0, 4: 5, 5: 0, 6: 0, 10: 5, 11: 7, 13:0, 16:6}
+            max_batch = max(target_selections)
 
-                try:
-                    if self.model_name == "cds":
-                        img_input_batch, segmentation_labels_batch, flattened_gt_batch, feat_label_batch, sob = next(loader_iter)
-                    elif self.model_name == "scn":
-                        img_input_batch, segmentation_labels_batch, flattened_gt_batch, feat_label_batch = next(
-                            loader_iter)
-                    elif self.model_name == "ainet":
-                        img_input_batch, segmentation_labels_batch, flattened_gt_batch, feat_label_batch, patch_posi_batch, patch_label_batch = next(
-                            loader_iter)
-                    elif self.model_name == "ssm":
-                        img_input_batch, segmentation_labels_batch, flattened_gt_batch, feat_label_batch, edge_batch = next(
-                            loader_iter)
-                    else:
-                        raise Exception('wrong model_name passed')
-                except StopIteration:
-                    break  # shouldn't happen if data is infinite
+            for batch_idx, batch in enumerate(val_loader):
+                if batch_idx > max_batch:
+                    break
+                if batch_idx not in target_selections:
+                    continue
 
-                batch_size = img_input_batch.size(0)
-                select_n = min(self.num_imgs - len(selected_imgs), max(1, batch_size // 2))
-                indices = torch.randperm(batch_size)[:select_n]
+                img_idx = target_selections[batch_idx]
+                if self.model_name == "cds":
+                    img_input_batch, segmentation_labels_batch, flattened_gt_batch, feat_label_batch, sob = batch
+                elif self.model_name == "scn":
+                    img_input_batch, segmentation_labels_batch, flattened_gt_batch, feat_label_batch = batch
+                elif self.model_name == "ainet":
+                    img_input_batch, segmentation_labels_batch, flattened_gt_batch, feat_label_batch, patch_posi_batch, patch_label_batch = batch
+                elif self.model_name == "ssm":
+                    img_input_batch, segmentation_labels_batch, flattened_gt_batch, feat_label_batch, edge_batch = batch
+                else:
+                    raise Exception('wrong model_name passed')
 
-                selected_imgs.append(img_input_batch[indices])
-                selected_labels.append(segmentation_labels_batch[indices])
-                selected_flattened_gt.append(flattened_gt_batch[indices])
-                selected_feat_label.append(feat_label_batch[indices])
+                selected_imgs.append(img_input_batch[[img_idx]])
+                selected_labels.append(segmentation_labels_batch[[img_idx]])
+                selected_flattened_gt.append(flattened_gt_batch[[img_idx]])
+                selected_feat_label.append(feat_label_batch[[img_idx]])
 
             # Stack into single tensors and cache
-            img = torch.cat(selected_imgs, dim=0)[:self.num_imgs]
-            seg_labels = torch.cat(selected_labels, dim=0)[:self.num_imgs]
-            flattened_gt = torch.cat(selected_flattened_gt, dim=0)[:self.num_imgs]
-            feat_label = torch.cat(selected_feat_label, dim=0)[:self.num_imgs]
+            img = torch.cat(selected_imgs, dim=0)
+            seg_labels = torch.cat(selected_labels, dim=0)
+            flattened_gt = torch.cat(selected_flattened_gt, dim=0)
+            feat_label = torch.cat(selected_feat_label, dim=0)
             self._fixed_images = (img, seg_labels, flattened_gt, feat_label)
 
 

@@ -68,29 +68,29 @@ def do_graphing_train(metrics_callback, log_dir, skip=150):
     plot_loss(metrics_callback.train_contrastive_loss, val_loss=None, title="train contrastive loss skip",
               save_path=os.path.join(log_dir, "train_contrastive_loss_skip.pdf"), skip=skip)
 
-    plot_loss(metrics_callback.train_similarsp_loss, val_loss=metrics_callback.val_similarsp_loss,
+    plot_loss(metrics_callback.train_othertwo_loss, val_loss=metrics_callback.val_othertwo_loss,
               title="similar sp loss",
-              save_path=os.path.join(log_dir, "similarsp_loss_noskip.pdf"), skip=0)
-    plot_loss(metrics_callback.train_similarsp_loss, val_loss=metrics_callback.val_similarsp_loss,
+              save_path=os.path.join(log_dir, "othertwo_loss_noskip.pdf"), skip=0)
+    plot_loss(metrics_callback.train_othertwo_loss, val_loss=metrics_callback.val_othertwo_loss,
               title="similar sp loss skip",
-              save_path=os.path.join(log_dir, "similarsp_loss_skip.pdf"), skip=skip)
+              save_path=os.path.join(log_dir, "othertwo_loss_skip.pdf"), skip=skip)
 
-    plot_loss(metrics_callback.train_similarsp_loss, val_loss=None, title="train similar sp loss",
-              save_path=os.path.join(log_dir, "train_similarsp_loss_noskip.pdf"), skip=0)
-    plot_loss(metrics_callback.train_similarsp_loss, val_loss=None, title="train similar sp loss skip",
-              save_path=os.path.join(log_dir, "train_similarsp_loss_skip.pdf"), skip=skip)
+    plot_loss(metrics_callback.train_othertwo_loss, val_loss=None, title="train similar sp loss",
+              save_path=os.path.join(log_dir, "train_othertwo_loss_noskip.pdf"), skip=0)
+    plot_loss(metrics_callback.train_othertwo_loss, val_loss=None, title="train similar sp loss skip",
+              save_path=os.path.join(log_dir, "train_othertwo_loss_skip.pdf"), skip=skip)
 
-    plot_loss(metrics_callback.train_impurity_loss, val_loss=metrics_callback.val_impurity_loss,
-              title="impurity loss",
-              save_path=os.path.join(log_dir, "impurity_loss_noskip.pdf"), skip=0)
-    plot_loss(metrics_callback.train_impurity_loss, val_loss=metrics_callback.val_impurity_loss,
-              title="impurity loss skip",
-              save_path=os.path.join(log_dir, "impurity_loss_skip.pdf"), skip=skip)
+    plot_loss(metrics_callback.train_otherone_loss, val_loss=metrics_callback.val_otherone_loss,
+              title="otherone loss",
+              save_path=os.path.join(log_dir, "otherone_loss_noskip.pdf"), skip=0)
+    plot_loss(metrics_callback.train_otherone_loss, val_loss=metrics_callback.val_otherone_loss,
+              title="otherone loss skip",
+              save_path=os.path.join(log_dir, "otherone_loss_skip.pdf"), skip=skip)
 
-    plot_loss(metrics_callback.train_impurity_loss, val_loss=None, title="train impurity loss",
-              save_path=os.path.join(log_dir, "train_impurity_loss_noskip.pdf"), skip=0)
-    plot_loss(metrics_callback.train_impurity_loss, val_loss=None, title="train impurity loss skip",
-              save_path=os.path.join(log_dir, "train_impurity_loss_skip.pdf"), skip=skip)
+    plot_loss(metrics_callback.train_otherone_loss, val_loss=None, title="train otherone loss",
+              save_path=os.path.join(log_dir, "train_otherone_loss_noskip.pdf"), skip=0)
+    plot_loss(metrics_callback.train_otherone_loss, val_loss=None, title="train otherone loss skip",
+              save_path=os.path.join(log_dir, "train_otherone_loss_skip.pdf"), skip=skip)
 
     plot_loss(metrics_callback.train_mean_asa, val_loss=metrics_callback.val_mean_asa,
               title="asa ",
@@ -127,8 +127,6 @@ def do_graphing_train(metrics_callback, log_dir, skip=150):
               save_path=os.path.join(log_dir, "train_recon_loss_noskip.pdf"), skip=0)
     plot_loss(metrics_callback.train_recon_loss, val_loss=None, title="train recon loss skip",
               save_path=os.path.join(log_dir, "train_recon_loss_skip.pdf"), skip=skip)
-
-    ##### Val enforce connecitivity only metrics
 
     plot_loss(train_loss=None, val_loss=metrics_callback.val_asa_enforce,
               title="asa enforce val only",

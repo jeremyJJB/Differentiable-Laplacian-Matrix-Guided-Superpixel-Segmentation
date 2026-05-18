@@ -10,8 +10,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 # *************************** my functions ****************************
-
-
 def predict_param(in_planes, channel=3):
     return nn.Conv2d(in_planes, channel, kernel_size=3, stride=1, padding=1, bias=True)
 
@@ -176,7 +174,7 @@ def update_v_map(prob, map):
     return new_map
 
 
-def update_spixel_map(img, prob0_v, prob0_h, prob1_v, prob1_h, prob2_v, prob2_h, prob3_v, prob3_h):
+def update_spixel_map_sin(img, prob0_v, prob0_h, prob1_v, prob1_h, prob2_v, prob2_h, prob3_v, prob3_h):
     initial_map = initialize_map(img)
     map3_h = update_h_map(prob3_h, initial_map)
     map3_v = update_v_map(prob3_v, map3_h)

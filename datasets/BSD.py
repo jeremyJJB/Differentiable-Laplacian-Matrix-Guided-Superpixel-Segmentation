@@ -23,7 +23,7 @@ from eval_spixel import ssm_flow_transforms
 
 
 class CustomPhotometricDistort(ImageOnlyTransform):
-    """Albumentations wrapper for  PhotometricDistort. This is only used for SSM"""
+    """albumentations wrapper for  PhotometricDistort. This is only used for SSM"""
 
     def __init__(self, always_apply=False, p=1.0):
         super().__init__(always_apply, p)
