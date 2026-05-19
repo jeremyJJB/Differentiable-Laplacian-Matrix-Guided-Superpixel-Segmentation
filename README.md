@@ -7,8 +7,8 @@ We included our preprocessed data from BSD 500, and they are publicly available 
 
 These models were trained on various Nvidia GPUs. The majority of training was completed on the 3070 Ti and RTX A5000. The models SCN and CDSpixel (aka CDS)
 work on all gpus listed, they required at most 8 GB of gpu memory. AInet required more and SSM requires much more, around 24 GB. SSM also 
-requires nvcc compilation and needed two A5000 gpus. This repo was tested on  Ubuntu version 22.04.5. with Nvidia driver version 535.288.01 and CUDA version 12.2 with Pycharm IDE. The code is primarily Python with
-some C code compiled with Cython, bash scripts to run the models, and MATLAB for plotting. The installation time for 
+requires nvcc compilation and needed two A5000 gpus. This repo was tested on  Ubuntu version 22.04.5. with Nvidia driver version 535.288.01 and CUDA version 12.2 with Pycharm IDE and Python version 3.10. 
+Note the code does not work with Python version 3.13. The code is primarily Python with some C code compiled with Cython, bash scripts to run the models, and MATLAB for plotting. The installation time for 
 running the demo is about 0.5 hours.
 
 # File Hierarchy
@@ -28,12 +28,16 @@ Other directories
 - build/
 
 # Data and Weight Download
-The following commands will download the zipped data and unzip it:
+The following commands will download the zipped data and weights and unzip it:
 ```bash
 mkdir zipdownloads
-mkdir databsd 
 # wget TODO:update.zip  -P ./zipdownloads/
-unzip -q ./zipdownloads/traindata.zip -d ./databsd
+#wget  TODO:weights.zip -P ./weights/
+mkdir databsd 
+mkdir weights
+
+unzip -q ./zipdownloads/data.zip -d ./databsd
+unzip -q ./zipdownloads/weights.zip -d ./weights/
 ```
 
 Your data folder for the BSD 500 preprocess images should look like the following
@@ -42,12 +46,6 @@ Your data folder for the BSD 500 preprocess images should look like the followin
   - images_preprocess
   - ssm_edges
 
-For the weights run the following commands
-```bash
-mkdir weights
-#wget  TODO:weights.zip -P ./weights/
-unzip -q ./zipdownloads/weights.zip -d ./weights/
-```
 Please note the weights provided here also include weights from original work SCN, AInet, CDS, SSM and the LAP weights for each model.
 
 # Setup virtual environment
@@ -96,14 +94,10 @@ This requires installation of common benchmarking application used across all ba
 The installation procedure has changed because of the date of the repo. For details of some library changes please see install_benchmark.sh
 
 ```bash
+sudo apt-get install libopencv-dev libgoogle-glog-dev libboost-all-dev libpng++-dev cimg-dev cimg-doc cmake # install dependencies
 ./install_benchmark.sh
 ```
 
-If the code errors out, you may need to install some dependencies.
-
-```bash
-sudo apt-get install libopencv-dev libgoogle-glog-dev libboost-all-dev libpng++-dev cimg-dev cimg-doc
-```
 The benchmarking code wants the test data in a specific folder. Additionally, the original semantic label data was stored in .mat files, the .csv files have been provided to you. 
 The benchmarking code requires .csv files also in a specific folder. 
 
@@ -116,10 +110,10 @@ cp -r ./databsd/ground_truth_preprocess/test ./superpixel-benchmark/data/BSDS500
 
 mkdir ./results/test_set
 ./inference.sh
-./inference_new_metric.sh
+./inference_new_metrics.sh
 ```
 
-For plotting please see eval_spixel/plot_metrics.m
+For plotting please see eval_spixel/plot_metrics.m.
 
 # License
 Please see the attached MIT license.
