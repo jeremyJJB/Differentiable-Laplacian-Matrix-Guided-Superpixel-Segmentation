@@ -35,7 +35,7 @@ batch_size=8 # 8 for scn/ssm/cds and 16 for ainet
 num_batches=1.0 # entire dataset
 num_workers=6
 learning_rate=5e-4 # SCN 5e-5, SSM and CDS 5e-4, AInet 8e-5
-#weight_decay=4e-4
+#weight_decay=4e-4 # for tv
 weight_decay=0.0
 
 

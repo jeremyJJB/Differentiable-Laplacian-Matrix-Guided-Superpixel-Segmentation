@@ -5,6 +5,7 @@ databsd/
 connectivity.c
 weights/
 results/
+superpixel-benchmark/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

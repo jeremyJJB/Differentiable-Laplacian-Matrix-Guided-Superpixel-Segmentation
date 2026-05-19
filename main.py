@@ -10,7 +10,7 @@ from utils.util import MetricsCallback, PrintLossesCallback, ValEpochGraphs #, T
 from datasets.BSD import make_train_transform, make_val_transform
 import yaml
 from albumentations import RandomCrop
-from eval_spixel.infer_bsds import rename_checkpoint_keys
+from eval_spixel.infer import rename_checkpoint_keys
 
 
 def train_val_sep(hp_config=None):
@@ -140,7 +140,8 @@ def train_val_combine(hp_config, max_epochs:int=5):
                           lr_decay_epoch=hp_config['LR_decay_epoch'])
 
     if hp_config['weights_to_load'] == "tv_only":
-        print("doing TV not weight loading here, weight loading could be in model")
+        # This is used for ssm
+        print("doing TV, not weight loading here, weight loading could be in model")
     elif len(hp_config['weights_to_load']) > 0:
         print("we are continue training")
         print(f"loading weights from {hp_config['weights_to_load']}")
@@ -183,28 +184,6 @@ def train_val_combine(hp_config, max_epochs:int=5):
                 print(f"Unexpected keys: {load_status.unexpected_keys}")
             else:
                 print("all keys loaded")
-
-        elif hp_config['model_name'] == "ssm":
-            weight_load = torch.load(hp_config['weights_to_load'], map_location=torch.device(hp_config['device']))
-            state_dict = weight_load['state_dict']
-            new_state_dict = {k.replace("model.", ""): v for k, v in state_dict.items()}
-            state_dict_final = rename_checkpoint_keys(new_state_dict)
-
-            load_status = model.model.load_state_dict(state_dict_final, strict=True)
-            # Check for missing or unexpected keys:
-            if load_status.missing_keys:
-                raise Exception(
-                    f"State dict loading mismatch:\n"
-                    f"Missing keys: {load_status.missing_keys}\n"
-                    f"Unexpected keys: {load_status.unexpected_keys}"
-                )
-            elif load_status.unexpected_keys:
-                print(f"Unexpected keys: {load_status.unexpected_keys}")
-            else:
-                print("all keys loaded")
-            print(f" the unexpected keys are: {load_status.unexpected_keys}")
-        else:
-            raise Exception(f"Unknown model: {hp_config['model_name']}")
 
     else:
         print("no weights to load doing TV from scratch")
