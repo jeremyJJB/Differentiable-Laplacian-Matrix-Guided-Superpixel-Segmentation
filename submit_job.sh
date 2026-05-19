@@ -42,7 +42,7 @@ weight_decay=0.0
 # MAKE SURE TO SWITCH THE TRAINING AND VAL STEP CODE in MyModules.py
 #loss_weights='{"recon":1.0,"compact":0.0001875,"contrastive":0.0,"lap":0.0}' # baseline
 loss_weights='{"recon":1.0,"compact":0.0001875,"contrastive":0.001,"lap":360.0}' # novel
-loss_name="cdspixel_novel"
+loss_name="novel_cds"
 
 # trained weight path usually load weights here from tsv for tv
 weights_trained="/path/to/weights/weights.ckpt"
