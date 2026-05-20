@@ -3,13 +3,13 @@
 # Differentiable Laplacian Matrix Guided Superpixel Segmentation
 
 This readme contains the code for the work entitled "Differentiable Laplacian Matrix Guided Superpixel Segmentation" for CVPR 2026.
-We included our preprocessed data from BSD 500, and they are publicly available here. 
+We included our preprocessed data from BSD 500. 
 
 These models were trained on various Nvidia GPUs. The majority of training was completed on the 3070 Ti and RTX A5000. The models SCN and CDSpixel (aka CDS)
 work on all gpus listed, they required at most 8 GB of gpu memory. AInet required more and SSM requires much more, around 24 GB. SSM also 
 requires nvcc compilation and needed two A5000 gpus. This repo was tested on  Ubuntu version 22.04.5. with Nvidia driver version 535.288.01 and CUDA version 12.2 with Pycharm IDE and Python version 3.10. 
 Note the code does not work with Python version 3.13. The code is primarily Python with some C code compiled with Cython, bash scripts to run the models, and MATLAB for plotting. The installation time for 
-running the demo is about 0.5 hours.
+is about 0.5 hours. A YouTube [video](https://www.youtube.com/watch?v=GMVh-G-WQ50) is avaible describing a high level overview of the method. 
 
 # File Hierarchy
 
@@ -21,6 +21,7 @@ running the demo is about 0.5 hours.
 - models/
 - results/
 - utils/
+- superpixel-benchmark/
 
 Other directories
 - .venv/
@@ -31,8 +32,8 @@ Other directories
 The following commands will download the zipped data and weights and unzip it:
 ```bash
 mkdir zipdownloads
-# wget TODO:update.zip  -P ./zipdownloads/
-#wget  TODO:weights.zip -P ./weights/
+wget https://web.eece.maine.edu/~zhu/LAP_Data/data.zip  -P ./zipdownloads/
+wget  https://web.eece.maine.edu/~zhu/LAP_Data/weights.zip -P ./zipdownloads/
 mkdir databsd 
 mkdir weights
 
